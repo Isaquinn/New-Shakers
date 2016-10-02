@@ -3,15 +3,16 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class OnClick : MonoBehaviour {
-	private int imageselect;
-	private GameObject imageinstrument;
-	// Use this for initialization
-	void Start () {
-		//imageselect = 0;
-		imageinstrument = GameObject.Find("Canvas/Image");
-	
+
+	[SerializeField]
+	private Image imageinstrument;
+
+	private Sprite[] instruments;
+	void Start () 
+	{
+		instruments = Resources.LoadAll<Sprite> ("instrument");
+		UpdateImage ();
 	}
-	// Update is called once per frame
 
 	public void Play()
 	{
@@ -22,48 +23,52 @@ public class OnClick : MonoBehaviour {
 	{
 		Application.LoadLevel ("app");
 		Debug.Log ("App");
+
 	}
 	public void ChangeInstrument()
 	{
 		Application.LoadLevel ("select");
 		Debug.Log ("Select");
+
 	}
 	public void UpButton()
 	{
-		imageselect -= 1;
+		InstrumentSelect.imageSelect -= 1;
+		UpdateImage ();
 	}
 	public void DownButton()
 	{
-
-		imageselect += 1;
-		Debug.Log (imageselect);
+		InstrumentSelect.imageSelect += 1;
+		UpdateImage ();
 	}
-	void Update () 
+
+	void UpdateImage () 
 	{
-		if(imageselect == 1)
+		if(InstrumentSelect.imageSelect > instruments.Length - 1)
 		{
-			imageinstrument.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("1");
+			InstrumentSelect.imageSelect = 0;
+		}
+		if(InstrumentSelect.imageSelect < 0)
+		{
+			InstrumentSelect.imageSelect = instruments.Length - 1;
+		}
+		imageinstrument.sprite = instruments [InstrumentSelect.imageSelect];
+		/*if(imageselect == 1)
+		{
+			imageinstrument.sprite = Resources.Load<Sprite>("img1");
 		}
 		else if(imageselect == 2)
 		{
-			imageinstrument.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Claves");
+			imageinstrument.sprite = Resources.Load<Sprite>("Claves");
 		}
 		else if(imageselect == 3)
 		{
-			imageinstrument.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("guiro");
+			imageinstrument.sprite = Resources.Load<Sprite>("guiro");
 		}
 		else if(imageselect == 0)
 		{
-			imageinstrument.gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("0");
+			//imageinstrument.sprite = Resources.Load<Sprite>("img0");
 
-		}
-		if(imageselect > 3)
-		{
-			imageselect = 0;
-		}
-		 if(imageselect < 0)
-		{
-			imageselect = 3;
-		}
+		}*/
 	}
 }
